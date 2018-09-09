@@ -1,0 +1,29 @@
+{
+  "name": "lighthouse-github-reporter",
+  "version": "1.13.0",
+  "description": "",
+  "bin": {
+    "sui-test": "./bin/lh.js"
+  },
+  "scripts": {
+    "lib:js": "npx rimraf ./lib && npx mkdirp ./lib && babel --presets sui ./src --out-dir ./lib",
+    "lib": "npm run lib:js",
+    "prepublish": "npm run lib"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@octokit/rest": "15.11.1",
+    "@s-ui/helpers": "1",
+    "babel-cli": "6.24.1",
+    "babel-core": "6.26.0",
+    "babel-plugin-dynamic-import-node": "2.0.0",
+    "babel-polyfill": "6.26.0",
+    "babel-preset-sui": "1",
+    "babelify": "8.0.0",
+    "chalk": "2.3.0",
+    "commander": "2.12.1",
+    "lighthouse-ci": "1.0.3"
+  }
+}
