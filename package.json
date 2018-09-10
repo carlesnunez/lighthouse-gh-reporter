@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "bin": {
-    "sui-test": "./bin/lh.js"
+    "lighthouse-github-reporter": "./bin/lh.js"
   },
   "scripts": {
     "lib:js": "npx rimraf ./lib && npx mkdirp ./lib && babel --presets sui ./src --out-dir ./lib",
