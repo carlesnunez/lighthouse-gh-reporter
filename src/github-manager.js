@@ -14,16 +14,20 @@ module.exports = class GithubManager {
       type: 'token',
       token
     })
+
+    return this
   }
-  sendReport(report) {
+  sendReport(code, body, owner, repositoryName, prId) {
     this._octokit.pullRequests
       .createReview({
-        owner: 'scmspain',
-        repo: 'frontend-ma--web-app',
-        number: process.env.TRAVIS_PULL_REQUEST || 48,
-        event: report.code,
-        body: `Lighthouse reporter:\n ${report.report}`
+        owner,
+        repo: repositoryName,
+        number: prId,
+        event: code,
+        body
       })
       .then(result => console.log(result))
+
+      return this
   }
 }
