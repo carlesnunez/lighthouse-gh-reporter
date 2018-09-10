@@ -8,7 +8,7 @@ module.exports = class LightHouseReportManager {
     let lighthouseReports = [];
     urls.forEach(url => {
       lighthouseReports.push(
-        new Promise(resolve => {
+        new Promise((resolve, reject) => {
           const child = spawn("node", [
             BIN_PATH,
             url,
@@ -24,12 +24,16 @@ module.exports = class LightHouseReportManager {
           });
 
           child.on("close", code => {
+            if(report){
             !code
               ? resolve({
                   code: isStrict ? "REQUEST_CHANGES" : "COMMENT",
                   report: JSON.parse(report)
                 })
               : resolve({ code: "COMMENT", report: JSON.parse(report) });
+              } else {
+                reject(new Error('No report was generated, this may be caused because the url can be accesed. Is your url a accesible?'))
+              }
           });
         })
       );
