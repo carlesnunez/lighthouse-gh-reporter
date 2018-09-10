@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "",
   "bin": {
-    "lighthouse-github-reporter": "./bin/lh.js"
+    "lighthouse-github-reporter": "./bin/lighthouse-github-reporter.js"
   },
   "scripts": {
     "lib:js": "npx rimraf ./lib && npx mkdirp ./lib && babel --presets sui ./src --out-dir ./lib",
