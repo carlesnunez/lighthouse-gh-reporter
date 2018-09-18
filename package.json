@@ -1,6 +1,6 @@
 {
-  "name": "lighthouse-github-reporter",
-  "version": "1.0.1",
+  "name": "lighthouse-gh-reporter",
+  "version": "1.0.0",
   "description": "",
   "bin": {
     "lighthouse-github-reporter": "./bin/lighthouse-github-reporter.js"
