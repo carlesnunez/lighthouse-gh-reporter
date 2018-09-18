@@ -11,7 +11,7 @@ To have a view about our websites performance we have lighthouse... But lighthou
 ## Installation
 
 ```sh
-npm install lighthouse-github-reporter
+npm install lighthouse-gh-reporter
 ```
 
 # CLI commands
