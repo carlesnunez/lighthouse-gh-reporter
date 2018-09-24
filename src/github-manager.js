@@ -17,17 +17,33 @@ module.exports = class GithubManager {
 
     return this
   }
-  sendReport(code, body, owner, repositoryName, prId) {
-    this._octokit.pullRequests
-      .createReview({
+  sendReport(body, owner, repositoryName, prId) {
+    this._octokit.issues.createComment(
+      {
         owner,
         repo: repositoryName,
         number: prId,
-        event: code,
         body
       })
-      .then(result => console.log(result))
-
       return this
+  }
+
+  removeReports(owner, repositoryName, prId, reporterUserName) {
+    let removedReports = []
+    this._octokit.issues.getComments({
+      owner,
+      repo: repositoryName,
+      number: prId,
+      per_page: 100
+      }).then(result => {
+          result.data.forEach(review => {
+            if(review.user.login === reporterUserName) {
+              console.log('----------->')
+              removedReports.push(this._octokit.issues.deleteComment({owner, repo: repositoryName, comment_id: review.id}))
+            }
+          })
+      })
+
+      return Promise.all(removedReports)
   }
 }

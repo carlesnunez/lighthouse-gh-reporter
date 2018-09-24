@@ -3,7 +3,7 @@ const {spawn} = require('child_process')
 const BIN_PATH = require.resolve('lighthouse/lighthouse-cli/index.js')
 
 module.exports = class LightHouseReportManager {
-  static generate(paramUrls, isStrict) {
+  static generate(paramUrls) {
     const urls = !Array.isArray(paramUrls) ? [paramUrls] : paramUrls;
     let lighthouseReports = [];
     urls.forEach(url => {
@@ -27,10 +27,9 @@ module.exports = class LightHouseReportManager {
             if(report){
             !code
               ? resolve({
-                  code: isStrict ? "REQUEST_CHANGES" : "COMMENT",
                   report: JSON.parse(report)
                 })
-              : resolve({ code: "COMMENT", report: JSON.parse(report) });
+              : resolve({ report: JSON.parse(report) });
               } else {
                 reject(new Error('No report was generated, this may be caused because the url can be accesed. Is your url a accesible?'))
               }
