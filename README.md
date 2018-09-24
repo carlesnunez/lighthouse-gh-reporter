@@ -51,8 +51,10 @@ The first one is by **CLI options**:
     -p, --pwa <pwa>, Set a minimum score limit for PWA, all scores under this number will be a non pass
     -f, --performance <performance>, Set a minimum score limit for PERFORMANCE, all scores under this number will be a non pass
     -p, --accessibility <accessibility>, ', 'Set a minimum score limit for PWA, all scores under this number will be a non pass
-    -b, --c <bestPractices>, Set a minimum score limit for BEST PRACTICES, all scores under this number will be a non pass
-    -s, --c <seo>, Set a minimum score limit for SEO, all scores under this number will be a non pass
+    -b, --bestPractices <bestPractices>, Set a minimum score limit for BEST PRACTICES, all scores under this number will be a non pass
+    -s, --seo <seo>, Set a minimum score limit for SEO, all scores under this number will be a non pass
+    -r, --reporterUserName <reporterUserName>, The reporter user name (who is going a put the comment) NEEDED for the low noise mode.
+    -n, --noiseLevel <noiseLevel>, Set the noise level to low and it will remove old reports each time that needs to put a new one
 ```
 
 The second one is by **package.json options**:
@@ -68,7 +70,6 @@ Inside our package.json we have should add the next structure
       "authToken": "<the github token of the user that will made the comments>",
       "owner": "<owner of the repo>",
       "repository": "<repository name>",
-      "strictReview": true | false,
       "scoreThresholds": {
         "performance": "0 to 100",
         "pwa": "0 to 100",

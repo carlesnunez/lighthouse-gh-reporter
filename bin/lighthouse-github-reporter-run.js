@@ -7,11 +7,18 @@ const path = require('path')
 const basePath = process.cwd()
 const projectPackage = require(path.join(basePath, 'package.json'))
 const packageConfig = projectPackage.config || {}
+const LOW_NOISE_LEVEL = 'low'
+
+function urls(val) {
+  console.log('__-->',val.split(','))
+  return val.split(',');
+}
 
 program
   .option(
     '-u, --urls <urls>',
-    'The url/urls(array) where the test is going to be executed.'
+    'The url/urls(array) where the test is going to be executed.',
+    urls
   )
   .option(
     '-a, --apiUrl <apiUrl>',
@@ -46,13 +53,18 @@ program
     'Set a minimum score limit for PWA, all scores under this number will be a non pass'
   )
   .option(
-    '-b, --c <bestPractices>, ',
+    '-b, --bestPractices <bestPractices>, ',
     'Set a minimum score limit for BEST PRACTICES, all scores under this number will be a non pass'
   )
   .option(
-    '-s, --c <seo>, ',
+    '-s, --seo <seo>, ',
     'Set a minimum score limit for SEO, all scores under this number will be a non pass'
   )
+  .option(
+    '-n, --noiseLevel <noiseLevel>, ',
+    'Set the noise level to low and it will remove old reports each time that needs to put a new one'
+  )
+  .option('-r, --reporterUserName <reporterUserName>, ')
 
   .parse(process.argv)
 
@@ -63,13 +75,14 @@ function buildParameters(packageConfig) {
     apiUrl: packageCfg.apiUrl || program.apiUrl,
     prId: program.prId,
     authToken:
-      packageCfg.authToken ||
       program.authToken ||
+      packageCfg.authToken ||
       process.env.GH_USER_AUTH_TOKEN,
-    owner: packageCfg.owner || program.owner,
-    repositoryName: packageCfg.repository || program.repository,
-    urls: packageCfg.urls || program.urls,
-    strictReview: packageCfg.strictReview || program.strictReview,
+    owner: program.owner || packageCfg.owner,
+    repositoryName: program.repository || packageCfg.repository,
+    urls: program.urls || packageCfg.urls,
+    reporterUserName: program.reporterUserName || packageCfg.reporterUserName,
+    noiseLevel: program.noiseLevel || packageCfg.noiseLevel || 'low',
     scoreThresholds: {
       performance:
         program.performance || packageCfg.scoreThresholds.performance || 100,
@@ -87,30 +100,45 @@ function buildParameters(packageConfig) {
   }
 }
 
+function initReport(parameters) {
+  const lighthouseReports = LighthouseReportManager.generate(
+    parameters.urls
+  )
+  
+  Promise.all(lighthouseReports)
+    .then(reports => {
+      reports.forEach(r => {
+        const parsedReport = LighthouseReportManager.parseReport(
+          r,
+          parameters.scoreThresholds
+        )
+        const mdReport = LighthouseReportManager.getMarkDownTable(parsedReport)
+        githubManager.sendReport(
+          mdReport,
+          parameters.owner,
+          parameters.repositoryName,
+          parameters.prId
+        )
+      })
+    })
+    .catch(e => console.log(e))
+}
+
 const parameters = buildParameters(packageConfig)
+
 const githubManager = new GithubManager(parameters.apiUrl).authenticate(
   parameters.authToken
 )
-const lighthouseReports = LighthouseReportManager.generate(
-  parameters.urls,
-  parameters.strictReview
-)
-
-Promise.all(lighthouseReports)
-  .then(reports => {
-    reports.forEach(r => {
-      const parsedReport = LighthouseReportManager.parseReport(
-        r,
-        parameters.scoreThresholds
-      )
-      const mdReport = LighthouseReportManager.getMarkDownTable(parsedReport)
-      githubManager.sendReport(
-        r.code,
-        mdReport,
-        parameters.owner,
-        parameters.repositoryName,
-        parameters.prId
-      )
-    })
+if(parameters.noiseLevel === LOW_NOISE_LEVEL) {
+  githubManager.removeReports(
+    parameters.owner,
+    parameters.repositoryName,
+    parameters.prId,
+    parameters.reporterUserName
+  ).then(() => {
+    // wait for delete
+    initReport(parameters)
   })
-  .catch(e => console.log(e))
+} else {
+  initReport(parameters)  
+}
