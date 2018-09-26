@@ -84,7 +84,7 @@ Inside our package.json we have should add the next structure
 
 By default all the thresholds will be 100. If you want to modify them you can do it as we show on the threshold config property or by cli option.
 
-## Hidding our user token
+## Hiding our user token
 
 The tool is prepared to get the token from env variable.
 
@@ -94,7 +94,7 @@ You just need to add the next env variable on your CI or system:
 
 ## Adding more than one url
 
-If you add more than one url on your urls array it will iterate runing lighthouse on each of them and doing 1 comment per url on the pr.
+If you add more than one url on your urls array it will iterate running Lighthouse on each of them and doing 1 comment per url on the pr.
 
 The comment have the next aspect
 
