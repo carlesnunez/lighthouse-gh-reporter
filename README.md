@@ -1,12 +1,12 @@
 # Lighthouse report manager
 
-> The configurable lighthouse github reporter
+> The configurable Lighthouse GitHub reporter
 
 ## Motivation
 
-Nowadays benchmark our websites is a fact. Each day google change it's algorithm being more strict and asking us to develop our websites in a more performant and clever way.
+Nowadays benchmark our websites is a fact. Each day Google change it's algorithm being more strict and asking us to develop our websites in a more performant and clever way.
 
-To have a view about our websites performance we have lighthouse... But lighthouse is not a tool that connects us with github by itself. This is why I created `lighthouse-github-reporter`.
+To have a view about our websites performance we have Lighthouse... But Lighthouse is not a tool that connects us with GitHub by itself. This is why I created `lighthouse-github-reporter`.
 
 ## Installation
 
@@ -33,7 +33,7 @@ npm install lighthouse-gh-reporter
 
 ## Run command CLI options
 
-The lh-gh-reporter have TWO ways two get the config variables.
+The lh-gh-reporter has two ways to get the config variables.
 
 The first one is by **CLI options**:
 
