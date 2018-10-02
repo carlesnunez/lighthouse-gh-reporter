@@ -38,7 +38,6 @@ module.exports = class GithubManager {
       }).then(result => {
           result.data.forEach(review => {
             if(review.user.login === reporterUserName) {
-              console.log('----------->')
               removedReports.push(this._octokit.issues.deleteComment({owner, repo: repositoryName, comment_id: review.id}))
             }
           })
