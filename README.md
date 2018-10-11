@@ -1,6 +1,6 @@
 # Lighthouse report manager
 
-> The configurable Lighthouse GitHub reporter
+> The configurable Lighthouse GH reporter
 
 ## Motivation
 
