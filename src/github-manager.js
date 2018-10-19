@@ -1,3 +1,5 @@
+const colors = require('colors/safe');
+
 module.exports = class GithubManager {
   constructor(baseUrl) {
     this._octokit = require('@octokit/rest')({
@@ -18,14 +20,13 @@ module.exports = class GithubManager {
     return this
   }
   sendReport(body, owner, repositoryName, prId) {
-    this._octokit.issues.createComment(
+    return this._octokit.issues.createComment(
       {
         owner,
         repo: repositoryName,
         number: prId,
         body
       })
-      return this
   }
 
   removeReports(owner, repositoryName, prId, reporterUserName) {
@@ -38,8 +39,10 @@ module.exports = class GithubManager {
       }).then(result => {
           result.data.forEach(review => {
             if(review.user.login === reporterUserName) {
-              removedReports.push(this._octokit.issues.deleteComment({owner, repo: repositoryName, comment_id: review.id}))
+              removedReports.push(this._octokit.issues.deleteComment({owner, repo: repositoryName, comment_id: review.id}).catch(e => console.log('--->',e)))
             }
+            (!reporterUserName) && console.log(colors.red('WARNING: LOW NOISE LEVEL needs reporter github user name in order to detect the bot comments, no comments were deleted'))
+
           })
       })
 
