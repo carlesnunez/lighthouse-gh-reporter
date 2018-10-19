@@ -16,23 +16,6 @@
     },
     "validate-commit-msg": {
       "types": "@s-ui/mono/src/types"
-    },
-    "lighthouse-github-reporter": {
-      "urls": [
-        "http://www.milanuncios.com",
-        "http://www.milanuncios.com/legal/indice"
-      ],
-      "apiUrl": "https://github.schibsted.io/api/v3",
-      "owner": "scmspain",
-      "repository": "frontend-ma--web-app",
-      "strictReview": false,
-      "scoreThresholds": {
-        "performance": 100,
-        "pwa": 40,
-        "accessibility": 30,
-        "best-practices": 100,
-        "seo": 100
-      }
     }
   },
   "keywords": [],
