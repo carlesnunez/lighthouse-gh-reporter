@@ -56,9 +56,12 @@ module.exports = class LightHouseReportManager {
     };
   }
 
-  static getMarkDownTable(report) {
+  static getMarkDownTable(report, isLowNoise) {
+    console.log('-->',isLowNoise)
     let table = `
 ## Lighthouse report for the URL: **${report.url}**
+<details open=${!isLowNoise}>
+<summary>Click here to open results 📉</summary>
 
 | Category   | Score | Threshold  | Pass |
 | ------------- | ------------- | ------------- | ------------- |
@@ -72,6 +75,10 @@ module.exports = class LightHouseReportManager {
 `;
       }
     });
+
+    table += `
+</details>
+    `
 
     return table;
   }

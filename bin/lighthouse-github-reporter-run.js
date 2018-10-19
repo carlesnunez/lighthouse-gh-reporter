@@ -1,7 +1,7 @@
 const GithubManager = require('../src/github-manager')
 const LighthouseReportManager = require('../src/lighthouse-report-manager')
 const program = require('commander')
-
+const colors = require('colors/safe');
 const path = require('path')
 
 const basePath = process.cwd()
@@ -10,7 +10,6 @@ const packageConfig = projectPackage.config || {}
 const LOW_NOISE_LEVEL = 'low'
 
 function urls(val) {
-  console.log('__-->',val.split(','))
   return val.split(',');
 }
 
@@ -101,27 +100,32 @@ function buildParameters(packageConfig) {
 }
 
 function initReport(parameters) {
+  console.log(colors.yellow(`Generating lighthouse report...`))
   const lighthouseReports = LighthouseReportManager.generate(
     parameters.urls
   )
-  
-  Promise.all(lighthouseReports)
+  return Promise.all(lighthouseReports)
     .then(reports => {
+      let mdReport = ''
+      console.log(colors.green(`Lighthouse generated report for ${lighthouseReports.length} urls`))  
       reports.forEach(r => {
         const parsedReport = LighthouseReportManager.parseReport(
           r,
           parameters.scoreThresholds
         )
-        const mdReport = LighthouseReportManager.getMarkDownTable(parsedReport)
-        githubManager.sendReport(
-          mdReport,
-          parameters.owner,
-          parameters.repositoryName,
-          parameters.prId
-        )
+        mdReport += LighthouseReportManager.getMarkDownTable(parsedReport, (parameters.noiseLevel === LOW_NOISE_LEVEL))
+      })
+      console.log(colors.blue(`Sending report to github pr-${parameters.prId} ${parameters.reporterUserName ? 'as' + parameters.reporterUserName : ''}`))
+      githubManager.sendReport(
+        mdReport,
+        parameters.owner,
+        parameters.repositoryName,
+        parameters.prId
+      ).then(() => {
+          console.log(colors.green(`Report to github was sent`))          
       })
     })
-    .catch(e => console.log(e))
+    .catch(e => console.log(colors.red(e)))
 }
 
 const parameters = buildParameters(packageConfig)
@@ -130,6 +134,8 @@ const githubManager = new GithubManager(parameters.apiUrl).authenticate(
   parameters.authToken
 )
 if(parameters.noiseLevel === LOW_NOISE_LEVEL) {
+  console.log(colors.gray(`NOISE LEVEL IS LOW - REMOVING OLD GITHUB COMMENTS ON PR-${parameters.prId}`))  
+
   githubManager.removeReports(
     parameters.owner,
     parameters.repositoryName,
