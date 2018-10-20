@@ -10,14 +10,6 @@
     "lib": "npm run lib:js",
     "prepublish": "npm run lib"
   },
-  "config": {
-    "sui-ssr": {
-      "forceWWW": "true"
-    },
-    "validate-commit-msg": {
-      "types": "@s-ui/mono/src/types"
-    }
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",
