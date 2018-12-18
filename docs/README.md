@@ -191,7 +191,3 @@ You can let the tool use your github TOKEN without put it as a command or config
 If your error is that the tool is not removing the old report comments BEFORE put the new ones it could be happening because you did not setted up the --reporterUserName <reporterUserName> option.
 
 Remember that this option is used to IDENTIFY the 'bot' that is putting the reports as coments on our PR's if we don't know who is the reporter we cannot delete its previous comments.
-
-## My cli doesn't run, finish and no message is shown
-
-It could be happening because the cli have a conexion problem due to the environment where are you running the cli or because the URL is unreachable.
