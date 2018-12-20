@@ -159,6 +159,7 @@ Inside it, under devPackages, for example, create a new property called 'config'
       "owner": "myCompany",
       "repository": "myRepo",
       "reporterUserName": "your reporter user name",
+      "noiseLevel": "low",
       "scoreThresholds": {
         "performance": 100,
         "pwa": 40,
@@ -176,11 +177,18 @@ I'll explain this config further more:
   - apiUrl: Our github API url, if you have a GH enterprise repo this should be the url of your GH enterprise api
   - Owner: The owner of your repository for example if is a repository under your own it must be your username.
   - repository: The repo name
+  - reporterUserName: used to IDENTIFY the 'bot' that is putting the reports as coments on our PR's
+  - noiseLevel: By default setted to low. In low mode will delete older reports and put new ones each time that we run the tool.
   - scoreThresholds: This is an important part. Our tool will put a cross if our score is under the number that we setted on each thresholds or will put a check if is equal or greater than the number than we setted up.
+
+
+!> Remember that reporterUserName is used to IDENTIFY the 'bot' that is putting the reports as coments on our PR's if we don't know who is the reporter we cannot delete its previous comments. If we don't tell the tool who is the reporter the low noise level will not work! - THIS IS VERY IMPORTANT!!
 
 ## Securing our github TOKEN
 
-You can let the tool use your github TOKEN without put it as a command or config variable. Just set an env variable on your CI called `GH_USER_AUTH_TOKEN`. It must be setted on the settings of your travis CI and setted up as a hidden variable in order to avoid leaks.
+You can let the tool use your github TOKEN without put it as a command or config variable. Just set an env variable on your CI called `GH_USER_AUTH_TOKEN`. 
+
+!> It must be setted on the settings of your travis CI and setted up as a hidden variable in order to avoid leaks.
 
 
 
@@ -190,4 +198,8 @@ You can let the tool use your github TOKEN without put it as a command or config
 
 If your error is that the tool is not removing the old report comments BEFORE put the new ones it could be happening because you did not setted up the --reporterUserName <reporterUserName> option.
 
-Remember that this option is used to IDENTIFY the 'bot' that is putting the reports as coments on our PR's if we don't know who is the reporter we cannot delete its previous comments.
+!> Remember that this option is used to IDENTIFY the 'bot' that is putting the reports as coments on our PR's if we don't know who is the reporter we cannot delete its previous comments. THIS IS VERY IMPORTANT!!
+
+## My cli doesn't run, finish and no message is shown
+
+It could be happening because the cli have a conexion problem due to the environment where are you running the cli or because the URL is unreachable.
