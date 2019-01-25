@@ -19,7 +19,7 @@ npm install lighthouse-gh-reporter
 Then you must use it from your package.json
 ```json
 scripts: {
-  run-lighthouse-reporter: "lighthouse-github-reporter -- --prId=<myId>"
+  "run:lighthouse": "lighthouse-github-reporter -- --prId=<myId>"
 }
 ```
 
